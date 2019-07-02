@@ -82,19 +82,29 @@ void		print_ants(int ants, int start, int end, t_rooms *rooms)
 
 	if (!ants)
 		return ;
+	//On recupère la liste des chemins possible et exploitable
 	paths = get_paths(rooms, start, end);
 	send_error(!paths);
+	//Maintenant qu'on à recuperer les paths on les tries pour connaitre les plus
+	//efficace
 	sort_paths(&paths);
+	//On regarde combien de fourmis le path peut contenir simultanement
 	find_path_capacity(paths, ants);
+	//Ecriture du chemin emprunté dans un fichier dédié
 	write_paths_file(paths, rooms);
 	ant_list = NULL;
 	can_continue = 1;
 	ants_left = ants;
+	//Tant que l'on peut continuer on continue
 	while (can_continue)
 	{
+		//On deplace les fourmis, en les affichants par la meme occasion
 		move_ants(&ant_list, rooms, &can_continue);
+		//Si il reste des fourmis et des operation à effectuer on retourne à la ligne
 		if (ant_list && can_continue)
 			ft_putchar('\n');
+		//On ajoute de nouvelles fourmis si il en reste à faire passer.
+		//Ce qui permet de savoir si on peut continuer ou si il n'y a plus d'operation 
 		can_continue = add_ants(paths, &ant_list, ants, &ants_left)
 					|| can_continue;
 	}

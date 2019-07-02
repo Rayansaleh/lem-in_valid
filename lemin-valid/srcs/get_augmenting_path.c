@@ -23,6 +23,10 @@ t_list	*get_connecting_rooms(int visiting, t_rooms *rooms, int end)
 	i = 0;
 	while (i < rooms->num_of_rooms)
 	{
+		//On ce positionne sur la room courante et on verifie`
+		//Et on passe en revu chaque room adjacente jusqu'à en 
+		//trouver une accessible si elle existe on l'a marque comme
+		//valide et on l'ajoute aux chemins possible.
 		if (rooms->paths[visiting][i] && i != visiting &&
 			(!rooms->paths[i][i] || i == end))
 		{

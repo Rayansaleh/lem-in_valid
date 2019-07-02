@@ -36,11 +36,18 @@ void		add_link_to_list(t_rooms **rooms, char *line)
 	int		first;
 	int		second;
 
+	//On retire le '-' pour conserver uniquement les room relatives au
+	//link courant
 	split = ft_strsplit(line, '-');
 	free(line);
 	send_error(!split[1] || split[2]);
+	//On fait correspondre la premiere room du link
+	//Avec l'index affilier à son nom
 	first = get_index(split[0], *rooms);
+	//On fait de meme pour la deuxieme room du link
 	second = get_index(split[1], *rooms);
+	//On set le path à 1 dans la matrice d'adjacence à l'index
+	//des 2 rooms constituant le link
 	(*rooms)->paths[first][second] = 1;
 	(*rooms)->paths[second][first] = 1;
 	free_split(split);

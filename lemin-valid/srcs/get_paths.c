@@ -37,8 +37,10 @@ static t_list	*get_augmenting_path(t_rooms *rooms, int start, int end,
 	while (!is_empty(to_visit))
 	{
 		room = pop_to_visit(to_visit);
+		//On met à jour les connction possible
 		connecting_rooms = get_connecting_rooms(room, rooms, end);
 		i = connecting_rooms;
+		//Parcours les rooms connecté et les marques comme visiter
 		while (i)
 		{
 			if (gfp((int *)i->content) != end || room_pointers[end] == end)
@@ -49,6 +51,7 @@ static t_list	*get_augmenting_path(t_rooms *rooms, int start, int end,
 		}
 		ft_lstdel(&connecting_rooms, &delete_generic);
 	}
+	//Enregistre le path utilisé et le retourne en fin de fonction
 	path = get_path(rooms, end, room_pointers);
 	free(to_visit);
 	return (path);
@@ -62,10 +65,14 @@ t_list			*get_paths(t_rooms *rooms, int start, int end)
 	int		*room_pointers;
 
 	rooms->paths[start][start] = 1;
+	//Initialisation d'un nouveau path
 	paths = new_t_queue();
 	remove_ste_connections(paths, rooms, start, end);
 	room_pointers = (int *)malloc(sizeof(int) * rooms->num_of_rooms);
+	//repertorie toutes les rooms par un numero
 	get_room_pointers(room_pointers, rooms);
+	//Tant que le path est utilisable on continue d'avancer dessus
+	//Et on la marque comme libre de nouveau
 	while ((ta = get_augmenting_path(rooms, start, end, room_pointers))
 			!= NULL)
 	{
@@ -73,6 +80,7 @@ t_list			*get_paths(t_rooms *rooms, int start, int end)
 		remove_visited(rooms, start);
 	}
 	free(room_pointers);
+	//On positionne path_list au debut de la liste
 	paths_list = peek(paths);
 	free(paths);
 	return (paths_list);
